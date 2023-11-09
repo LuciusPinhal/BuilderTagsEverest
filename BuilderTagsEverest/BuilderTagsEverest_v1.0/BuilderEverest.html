@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Builder Everest Tags and Position</title>
+        <link rel="stylesheet" href="Style.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="file-input-wrapper form-group titles">
+                <h1 class="title">Builder Everest Tags and Position</h1>
+                <div>
+                    <a href="../../index.html" style="padding: 10px;">Menu</a>
+                    <a href="../BuilderEverest/BuilderEverest.html">Builder Everest</a>
+                </div>
+            </div>
+            <div class="file-input-wrapper form-group">
+                <div class="file-input-container input-container">
+                    <label for="sourceFile" class="file-input">Arquivo Excel de Origem:</label>
+                    <input type="file" id="sourceFile" accept=".xlsx">
+                </div>
+            </div>
+
+            <div class="file-input-wrapper form-group">
+                <div class="file-input-container input-select">
+                  <label for="sheetSelect" class="file-input">Selecione a Planilha para Copiar:</label>
+                    <table id="sheetTable">
+                    <thead>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            
+
+            <div id="downloadButton" class="form-group">
+                <button id="copyBtn" disabled>Copiar Planilha</button>
+                <button id="downloadBtn" disabled>Download Planilha Modificada</button>
+
+                <div id="loadingBody" >
+                    <a class="spinner"></a>
+                    Carregando...
+                </div>
+            </div>
+            <div id="output" class="table-container"></div>
+        </div>
+
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+        <script src="./Script.js"></script>
+    </body>
+</html>

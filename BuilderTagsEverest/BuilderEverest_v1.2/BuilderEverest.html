@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Builder Everest</title>
+        <link rel="stylesheet" href="Style.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="file-input-wrapper form-group titles">
+                <h1 class="title">Builder Everest </h1>
+                <div>
+                    <a href="../../index.html" style="padding: 10px;">Menu</a>
+                    <a href="../BuilderTagsEverest/BuilderEverest.html">Builder Everest and Tags</a>
+                </div>
+            </div>
+            
+            <div class="file-input-wrapper form-group">
+                <div class="file-input-container input-container">
+                    <label for="sourceFileInput" class="file-input">Arquivo Excel de Origem:</label>
+                    <input type="file" id="sourceFileInput" accept=".xlsx">
+                </div>
+            
+                <div class="file-input-container input-container">
+                    <label for="destinationFile" class="file-input">Arquivo Excel de Destino:</label>
+                    <input type="file" id="destinationFile" accept=".xlsx">
+                </div>
+            </div>
+
+            <div class="file-input-wrapper form-group">
+                <div class="file-input-container input-select">
+                    <label for="sheetCheckboxes" class="file-input">Selecione as Planilhas para Copiar:</label>
+                        <div id="sheetCheckboxes">
+                        </div>
+                        <div id="buttonSave">
+                            <button id="saveButton">Salvar</button>
+                        </div>
+                  </div>
+            
+            </div>
+            
+            <div class="file-input-wrapper form-group">               
+                <div class="file-input-container input-container" id="inputContainerAttributeTwo">
+                    <label for="replaceTo" class="file-input" id="attributeTwo">Atributo 01</label>
+                    <p class="file-input" id="attributeTwoValue"></p>
+                    <input type="text" id="replaceTo" placeholder="Digite apenas a variável...              Exemplo: A,B,C">
+                </div>
+
+                <div class="file-input-container input-container" id="inputContainerAttribute">
+                    <label for="replaceGadgets" class="file-input" id="attributeOne">Atributo 02</label>
+                    <p class="file-input" id="attributeOneValue"></p>
+                    <input type="text" id="replaceGadgets" placeholder="Digite apenas a variável...              Exemplo: A,B,C">
+                </div>
+                
+            </div>
+            
+            <div class="file-input-wrapper form-group">
+                <div class="file-input-container input-container" id="inputContainerAttributeThree">
+                    <label for="replaceAtribute03" class="file-input" id="attributeThree">Atributo 03</label>
+                    <p class="file-input" id="attributeThreeValue"></p>
+                    <input type="text" id="replaceAtribute03" placeholder="Digite apenas a variável...              Exemplo: A,B,C">
+                </div>
+                
+            </div>
+
+            <div id="downloadButton" class="form-group">
+                <button id="copyBtn" disabled>Copiar Planilha</button>
+                <button id="downloadBtn" disabled>Download Planilha Modificada</button>
+            </div>
+            <div id="output" class="table-container"></div>
+        </div>
+
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+        <script src="./Script.js"></script>
+    </body>
+</html>

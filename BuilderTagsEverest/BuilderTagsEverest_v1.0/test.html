@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Alterar ordem das planilhas em Excel</title>
+  <style>
+    .container {
+    max-width: 800px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+}
+.title{
+    margin: 0 0px 1rem 0;
+}
+.file-input-wrapper {
+    display: flex;
+    width: 100%;
+}
+#sourceFile,
+#destinationFile {
+    width: 100%;
+}
+.file-input-container {
+    flex: 1;
+    position: relative;
+    border: 2px solid #ccc;
+    padding: 15px;
+    margin-right: 10px;
+}
+.input-select{
+    flex: 4;
+}
+
+#attributeOneValue,
+#attributeTwoValue,
+#attributeTheeValue,
+#attributeFourValue,
+#attributeFiveValue{
+  font-size: 11px;
+  left: 12rem;
+  top: -26px;
+}
+
+#attributeTheeValue{
+  left: 10rem;
+}
+
+#attributeFourValue{
+  left: 5rem;
+  top: -25px;
+}
+
+.input-container{
+    width: 42%;
+}
+
+.file-input {
+    position: absolute;
+    top: -16px;
+    left: 8px;
+    background-color: #fff;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 1;
+}
+.file-input input[type="file"] {
+    width: 100%;
+}
+.form-group {
+    margin-bottom: 1rem;
+} 
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+input,
+select {
+    width: 50px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+} 
+#downloadButton {
+    text-align: center;
+    margin-top: 20px;
+}
+#attributeThreeValue{
+  left: 35rem;
+  top: -28px;
+
+}
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+button:hover {
+    background-color: #0056b3;
+}
+input[type=file]::file-selector-button {
+    margin-right: 20px;
+    border: none;
+    background: #084cdf;
+    padding: 10px 20px;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+  }
+  
+  input[type=file]::file-selector-button:hover {
+    background: #0d45a5;
+  }
+  
+  .table-container {
+    max-height: 165px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+  }
+  
+  .table-container p {
+    margin: 0;
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .table-container p:last-child {
+    border-bottom: none;
+  }
+  
+  .table-container table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table-container th,
+  .table-container td {
+    padding: 8px 8px 8px 30px;
+    width: 50%;
+    text-align: left;
+  }
+  
+  .table-container th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .table-container td {
+    border-bottom: 1px solid #eee;
+  }
+  #inputFile{
+    width: 100%;
+  }
+  .sortable{
+    width: 50px !important;
+  }
+  ul {
+    list-style: none;
+    padding: 0 0 0 20px ;
+  }
+  li {
+    margin-bottom: 5px;
+  }
+  .header{
+    direction: rtl;
+    margin-bottom: 1%;
+  }
+
+  
+  </style>
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+</head>
+<body>
+  
+
+  <input type="file" id="inputFile" />
+  <p>Arraste e solte as planilhas na ordem desejada:</p>
+  <ul id="sortableList"></ul>
+  <button onclick="reorderSheets()">Alterar e Baixar</button>
+
+  <script>
+    // Função para carregar as planilhas na lista de ordenação
+    function loadSheetsToList(workbook) {
+  const sortableList = document.getElementById('sortableList');
+  sortableList.innerHTML = '';
+
+  for (const sheetName in workbook.Sheets) {
+    const listItem = document.createElement('li');
+    listItem.innerHTML = `
+      <input type="number"  class="sortable" min="1" value="1" style="width: 40px;" data-name="${sheetName}">
+      - Planilha: ${sheetName}
+    `;
+    sortableList.appendChild(listItem);
+  }
+}
+
+
+
+    // Função para alterar a ordem das planilhas no arquivo Excel
+function reorderSheets() {
+  const inputFile = document.getElementById('inputFile').files[0];
+
+  if (!inputFile) {
+    alert('Por favor, selecione um arquivo Excel.');
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    const data = new Uint8Array(e.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+
+    const sortableList = document.getElementById('sortableList');
+    const newSheetOrder = [];
+
+    for (let i = 0; i < sortableList.children.length; i++) {
+      const sheetId = sortableList.children[i].getAttribute('data-id');
+      const sheetName = sortableList.children[i].innerText.split(' - ')[1];
+      newSheetOrder.push({ sheetId, sheetName });
+    }
+
+    newSheetOrder.sort((a, b) => a.sheetId - b.sheetId);
+
+    // Criar um novo arquivo Excel com as planilhas na ordem especificada
+    const newWorkbook = XLSX.utils.book_new();
+    newSheetOrder.forEach(sheetInfo => {
+      if (workbook.Sheets[sheetInfo.sheetName]) {
+        XLSX.utils.book_append_sheet(newWorkbook, workbook.Sheets[sheetInfo.sheetName], sheetInfo.sheetName);
+      }
+    });
+
+    // Salvar o novo arquivo Excel
+    const wbout = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'output.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
+  reader.readAsArrayBuffer(inputFile);
+}
+function reorderSheets() {
+  const inputFile = document.getElementById('inputFile').files[0];
+
+  if (!inputFile) {
+    alert('Por favor, selecione um arquivo Excel.');
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    const data = new Uint8Array(e.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+
+    const sortableList = document.getElementById('sortableList');
+    const newSheetOrder = [];
+
+    for (let i = 0; i < sortableList.children.length; i++) {
+      const sheetName = sortableList.children[i].querySelector('input').getAttribute('data-name');
+      const sheetId = parseInt(sortableList.children[i].querySelector('input').value);
+      newSheetOrder.push({ sheetId, sheetName });
+    }
+
+    newSheetOrder.sort((a, b) => a.sheetId - b.sheetId);
+
+    // Criar um novo arquivo Excel com as planilhas na ordem especificada
+    const newWorkbook = XLSX.utils.book_new();
+    newSheetOrder.forEach(sheetInfo => {
+      if (workbook.Sheets[sheetInfo.sheetName]) {
+        XLSX.utils.book_append_sheet(newWorkbook, workbook.Sheets[sheetInfo.sheetName], sheetInfo.sheetName);
+      }
+    });
+
+    // Salvar o novo arquivo Excel
+    const wbout = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'output.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
+  reader.readAsArrayBuffer(inputFile);
+}
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const inputFile = document.getElementById('inputFile');
+
+      inputFile.addEventListener('change', function () {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+
+          loadSheetsToList(workbook);
+
+          // Inicializar a lista de ordenação com a biblioteca Sortable
+          const sortable = new Sortable(document.getElementById('sortableList'), {
+            animation: 150,
+          });
+        };
+
+        reader.readAsArrayBuffer(inputFile.files[0]);
+      });
+    });
+  </script>
+</body>
+</html>
